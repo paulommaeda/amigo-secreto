@@ -99,5 +99,19 @@ $questions = was_site_questions();
     </section>
 
     <?php require __DIR__ . '/parts/create-cta.php'; ?>
+
+    <section class="was-site-wrap was-site-section was-site-institutional" aria-labelledby="was-site-institutional-title">
+        <div class="was-site-section-head">
+            <p class="was-site-kicker">Seu Amigo Secreto</p>
+            <h2 id="was-site-institutional-title">Sobre e contato</h2>
+            <p>Conheça o projeto de Paulo Maeda, fale com o suporte e consulte os termos do serviço.</p>
+            <nav class="was-site-institutional-links" aria-label="Informações do site">
+                <?php foreach (was_site_information_links() as $label => $url) : ?>
+                    <a class="was-site-text-link" href="<?php echo esc_url($url); ?>"><?php echo esc_html($label); ?></a>
+                <?php endforeach; ?>
+            </nav>
+        </div>
+        <?php require __DIR__ . '/parts/contact-details.php'; ?>
+    </section>
 </main>
 <?php require __DIR__ . '/footer.php'; ?>

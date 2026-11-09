@@ -229,7 +229,7 @@ function was_site_mcp_call($id, $params) {
     }
     $name = $params->name ?? '';
     if ($name === 'guia_do_sorteio' && !get_object_vars($args)) {
-        $links = was_site_public_links() + ['E-mail de suporte' => 'mailto:' . was_site_contact_email()];
+        $links = was_site_public_links() + was_site_contact_links();
         $text = was_site_guide_markdown() . "\n\n## Links públicos\n\n" . was_site_markdown_links($links);
     } elseif ($name === 'buscar_artigos' && is_string($args->consulta ?? null) && count(get_object_vars($args)) === 1) {
         $search = sanitize_text_field($args->consulta);

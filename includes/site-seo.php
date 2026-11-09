@@ -9,6 +9,7 @@ add_filter('document_title_parts', 'was_site_search_title');
 add_filter('wp_robots', 'was_site_robots_meta');
 add_action('template_redirect', 'was_site_private_headers', 0);
 add_filter('robots_txt', 'was_site_robots_text', 20, 2);
+add_action('do_robotstxt', 'was_site_robots_cache_control');
 add_filter('wp_sitemaps_posts_query_args', 'was_site_sitemap_posts_args');
 add_filter('posts_where', 'was_site_public_posts_where', 10, 2);
 add_filter('wp_sitemaps_posts_entry', 'was_site_sitemap_post_date', 10, 2);
@@ -53,6 +54,13 @@ function was_site_robots_text($output, $public) {
         return preg_replace('/^\h*User-agent:\h*\*\h*(?:#[^\r\n]*)?\r?\n/mi', '$0' . $line, $output, 1);
     }
     return rtrim($output) . "\n\nUser-agent: *\n" . $line;
+}
+
+function was_site_robots_cache_control() {
+    if (was_site_public_enabled()) {
+        header('Cache-Control: public, max-age=300, must-revalidate');
+        do_action('litespeed_control_set_ttl', 300, 'Amigo Secreto robots.txt');
+    }
 }
 
 function was_site_sitemap_posts_args($args) {
@@ -285,6 +293,7 @@ function was_site_schema($view, $role, $url, $description, $image, $post) {
     $language = get_bloginfo('language');
     $name = was_site_brand();
     $email = was_site_contact_email();
+    $phone = was_site_business_settings()['telephone'];
     $publisher = ['@id' => $home . '#organization'];
     $website = ['@id' => $home . '#website'];
     $webpage = ['@id' => $url . '#webpage'];
@@ -303,10 +312,13 @@ function was_site_schema($view, $role, $url, $description, $image, $post) {
             'description' => was_site_description(),
             'logo' => get_site_icon_url(512) ?: plugins_url('assets/site-mark.svg', WAS_PLUGIN_FILE),
             'email' => $email,
+            'telephone' => $phone,
+            'address' => was_site_business_address(),
             'contactPoint' => [
                 '@type' => 'ContactPoint',
                 'contactType' => 'Suporte',
                 'email' => $email,
+                'telephone' => $phone,
                 'availableLanguage' => 'Português',
                 'url' => was_site_page_url('contact') ?: $home . '#contato',
             ],

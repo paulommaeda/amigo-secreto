@@ -3,7 +3,7 @@
  * Plugin Name: WP Amigo Secreto Pro (SEO & SaaS Edition)
  * Plugin URI: https://github.com/paulommaeda/amigo-secreto
  * Description: Crie sorteios de amigo secreto com convites via WhatsApp, revelação por PIN e integração com o FluentCRM.
- * Version: 22.4.1
+ * Version: 22.4.2
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: Paulo Maeda
@@ -18,12 +18,13 @@ if (defined('WAS_PLUGIN_FILE')) {
 }
 
 define('WAS_PLUGIN_FILE', __FILE__);
-define('WAS_VERSION', '22.4.1');
+define('WAS_VERSION', '22.4.2');
 
 require_once __DIR__ . '/includes/database.php';
 require_once __DIR__ . '/includes/frontend.php';
 require_once __DIR__ . '/includes/site.php';
 require_once __DIR__ . '/includes/site-content.php';
+require_once __DIR__ . '/includes/site-pages.php';
 require_once __DIR__ . '/includes/site-seo.php';
 require_once __DIR__ . '/includes/site-agents.php';
 require_once __DIR__ . '/includes/updater.php';
@@ -34,5 +35,7 @@ if (is_admin()) {
 }
 
 register_activation_hook(__FILE__, 'was_install');
-register_deactivation_hook(__FILE__, 'was_site_disable');
+register_deactivation_hook(__FILE__, static function () {
+    was_site_change_pages('was_site_disable');
+});
 add_action('plugins_loaded', 'was_install', 5);

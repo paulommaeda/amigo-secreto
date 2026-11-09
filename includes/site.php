@@ -159,7 +159,7 @@ function was_site_body_classes($classes) {
 function was_site_disable() {
     $site = was_site_settings();
     if (empty($site['enabled'])) {
-        return;
+        return true;
     }
 
     $pages = $site['pages'];
@@ -175,5 +175,5 @@ function was_site_disable() {
     }
 
     $site['enabled'] = false;
-    update_option('was_site_settings', $site, true);
+    return update_option('was_site_settings', $site, true);
 }

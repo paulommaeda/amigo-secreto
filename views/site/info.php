@@ -21,6 +21,9 @@ $role = was_site_current_role(['about', 'contact']);
                 </div>
             </header>
             <div class="was-site-wrap was-site-reading was-site-prose">
+                <?php if ($role === 'contact' && !post_password_required()) : ?>
+                    <?php require __DIR__ . '/parts/contact-details.php'; ?>
+                <?php endif; ?>
                 <?php the_content(); ?>
             </div>
         </article>

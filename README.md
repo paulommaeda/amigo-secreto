@@ -20,11 +20,11 @@ Em **Configurações → Amigo Secreto**, clique em **Ativar site do Amigo Secre
 
 O botão **Desativar layouts do site** recupera a configuração anterior de leitura nas páginas que o plugin definiu. As páginas criadas e os posts ficam disponíveis no WordPress.
 
-Se os layouts já estavam ativos, abra **Configurações → Amigo Secreto → Adicionar novas páginas** quando houver páginas novas na atualização. O painel cria as páginas que faltam, incluindo **Contato** na versão 22.4.0. Os textos institucionais podem ser editados em **Páginas**.
+Em sites com os layouts ativos, a versão 22.4.2 prepara as páginas institucionais que estiverem faltando, incluindo **Contato**, no primeiro carregamento do WordPress. Sobre, Contato, Termos de Uso e Política de Privacidade ficam ligados na home e seus textos podem ser editados em **Páginas**. Use **Configurações → Amigo Secreto → Dados públicos de contato** para atualizar o telefone ou publicar rua e CEP de um endereço comercial. O painel **Adicionar novas páginas** pode completar as páginas de acesso e repor páginas institucionais ausentes.
 
 ## SEO e acesso por agentes
 
-Com os layouts ativos e o site visível para buscadores, o plugin declara em `robots.txt` as preferências de busca, uso em respostas de IA e treinamento. O sitemap nativo usa as datas das páginas e publicações. Login, cadastro, painel e convites ficam fora do sitemap e têm sinal de desindexação. A home, os artigos e as páginas institucionais recebem metadados de busca e compartilhamento e dados estruturados. Se houver um plugin de SEO compatível ativo, ele controla os metadados HTML.
+Com os layouts ativos e o site visível para buscadores, o plugin declara em `robots.txt` as preferências de busca, uso em respostas de IA e treinamento. A resposta virtual do WordPress tem cache de até cinco minutos. Depois da atualização, limpe também o cache da hospedagem ou CDN se a auditoria ainda receber o arquivo antigo. O sitemap nativo usa as datas das páginas e publicações. Login, cadastro, painel e convites ficam fora do sitemap e têm sinal de desindexação. A home, os artigos e as páginas institucionais recebem metadados de busca e compartilhamento e dados estruturados. Se houver um plugin de SEO compatível ativo, ele controla os metadados HTML.
 
 - **`/llms.txt`** lista as páginas públicas e os artigos recentes.
 - **`/index.md`** oferece a versão Markdown da home. A home também responde em Markdown quando o cabeçalho `Accept: text/markdown` é preferido.

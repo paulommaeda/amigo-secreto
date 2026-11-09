@@ -12,6 +12,31 @@ function was_site_contact_email() {
     return 'contato@paulomaeda.com';
 }
 
+function was_site_business_settings() {
+    return wp_parse_args(get_option('was_site_business', []), [
+        'telephone' => '+5541992087325',
+        'streetAddress' => '',
+        'postalCode' => '',
+    ]);
+}
+
+function was_site_business_address() {
+    $business = was_site_business_settings();
+    return [
+        '@type' => 'PostalAddress',
+        'addressLocality' => 'Curitiba',
+        'addressRegion' => 'PR',
+        'addressCountry' => 'BR',
+    ] + array_filter(array_intersect_key($business, ['streetAddress' => true, 'postalCode' => true]));
+}
+
+function was_site_contact_links() {
+    return [
+        'E-mail de suporte' => 'mailto:' . was_site_contact_email(),
+        'Telefone de suporte' => 'tel:' . was_site_business_settings()['telephone'],
+    ];
+}
+
 function was_site_description() {
     return 'Crie um sorteio de amigo secreto grátis, convide pelo WhatsApp e consulte o resultado por e-mail ou com um PIN de quatro dígitos.';
 }
@@ -46,15 +71,37 @@ function was_site_public_enabled() {
         && $home === (int) get_option('page_on_front') && get_post_field('post_password', $home) === '';
 }
 
-function was_site_public_links() {
+function was_site_information_links() {
     return array_filter([
-        'Como funciona' => was_site_page_id('tutorial') ? was_site_page_url('tutorial') : home_url('/#como-funciona'),
-        'Blog' => was_site_page_id('blog') ? was_site_page_url('blog') : '',
         'Sobre' => was_site_page_url('about'),
         'Contato' => was_site_page_url('contact') ?: home_url('/#contato'),
         'Termos de Uso' => was_site_page_url('terms'),
         'Política de Privacidade' => was_site_page_url('privacy'),
     ]);
+}
+
+function was_site_public_links() {
+    return array_filter([
+        'Como funciona' => was_site_page_id('tutorial') ? was_site_page_url('tutorial') : home_url('/#como-funciona'),
+        'Blog' => was_site_page_id('blog') ? was_site_page_url('blog') : '',
+    ]) + was_site_information_links();
+}
+
+function was_site_purge_information_cache($include_robots = false) {
+    $urls = [home_url('/'), home_url('/index.md'), home_url('/llms.txt')];
+    if ($include_robots) {
+        $urls[] = home_url('/robots.txt');
+        $urls[] = wp_sitemaps_get_server()->index->get_index_url();
+    }
+    foreach (['about', 'contact', 'terms', 'privacy'] as $role) {
+        $url = was_site_page_url($role);
+        if ($url) {
+            $urls[] = $url;
+        }
+    }
+    foreach (array_unique($urls) as $url) {
+        do_action('litespeed_purge_url', $url);
+    }
 }
 
 function was_site_public_articles($limit, $search = '', $orderby = 'date') {

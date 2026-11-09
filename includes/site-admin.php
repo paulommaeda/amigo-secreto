@@ -30,6 +30,8 @@ function was_site_admin_page() {
         <h1>Site do Amigo Secreto</h1>
         <?php if ($result === 'error') : ?>
             <div class="notice notice-error"><p>Não foi possível preparar todas as páginas. Tente ativar novamente.</p></div>
+        <?php elseif ($result === 'business_error') : ?>
+            <div class="notice notice-error"><p>Confira o telefone com DDD e o CEP, se informado.</p></div>
         <?php elseif ($result === 'saved') : ?>
             <div class="notice notice-success"><p>Configuração salva.</p></div>
         <?php endif; ?>
@@ -47,6 +49,7 @@ function was_site_admin_page() {
                 <p>Adicione as páginas que ainda faltam. Os textos de Sobre, Contato, Termos de Uso e Política de Privacidade ficam editáveis em <strong>Páginas</strong>.</p>
                 <?php was_site_settings_form('complete', 'Adicionar novas páginas'); ?>
             <?php endif; ?>
+            <?php was_site_business_form(); ?>
             <p>Você pode desativar os layouts para voltar à página inicial e à configuração de blog anteriores.</p>
         <?php else : ?>
             <p>Ative a página inicial pública, os layouts de blog, artigo, arquivo e 404 e conecte o painel de sorteios ao menu do site.</p>
@@ -100,16 +103,68 @@ function was_site_configure() {
     $action = was_request_value($_POST, 'was_site_action');
     $result = 'saved';
     if ($action === 'disable') {
-        was_site_disable();
+        $result = was_site_change_pages('was_site_disable') ? 'saved' : 'error';
     } elseif ($action === 'enable') {
-        $result = was_site_enable() ? 'saved' : 'error';
+        $result = was_site_change_pages('was_site_enable') ? 'saved' : 'error';
     } elseif ($action === 'complete') {
         $result = was_site_complete() ? 'saved' : 'error';
+    } elseif ($action === 'business') {
+        $result = was_site_save_business() ? 'saved' : 'business_error';
     }
 
     $url = add_query_arg(['page' => 'was-site', 'was_result' => $result], admin_url('options-general.php'));
     wp_safe_redirect($url, 303);
     exit;
+}
+
+function was_site_business_form() {
+    $business = was_site_business_settings();
+    ?>
+    <h2>Dados públicos de contato</h2>
+    <p>O telefone e o endereço cadastrado aparecem na página inicial, em Contato e nos dados estruturados. O site usa Curitiba, PR, Brasil como localidade.</p>
+    <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
+        <?php wp_nonce_field('was_configure_site'); ?>
+        <input type="hidden" name="action" value="was_configure_site">
+        <input type="hidden" name="was_site_action" value="business">
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="was-business-phone">Telefone profissional</label></th>
+                <td><input id="was-business-phone" name="was_business_phone" type="tel" class="regular-text" maxlength="28" value="<?php echo esc_attr($business['telephone']); ?>" required></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="was-business-street">Endereço comercial</label></th>
+                <td><input id="was-business-street" name="was_business_street" class="regular-text" maxlength="150" value="<?php echo esc_attr($business['streetAddress']); ?>"><p class="description">Rua, número e complemento, se quiser publicar um endereço de correspondência.</p></td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="was-business-postcode">CEP comercial</label></th>
+                <td><input id="was-business-postcode" name="was_business_postcode" inputmode="numeric" maxlength="9" pattern="[0-9]{5}-?[0-9]{3}" value="<?php echo esc_attr($business['postalCode']); ?>"></td>
+            </tr>
+        </table>
+        <?php submit_button('Salvar dados de contato'); ?>
+    </form>
+    <?php
+}
+
+function was_site_save_business() {
+    $input = trim(was_request_value($_POST, 'was_business_phone'));
+    $phone = preg_replace('/\D+/', '', $input);
+    if (strpos($input, '+') !== 0 && in_array(strlen($phone), [10, 11], true)) {
+        $phone = '55' . $phone;
+    }
+    $postcode = trim(was_request_value($_POST, 'was_business_postcode'));
+    if (!preg_match('/^[1-9][0-9]{7,14}$/D', $phone) || ($postcode !== '' && !preg_match('/^[0-9]{5}-?[0-9]{3}$/D', $postcode))) {
+        return false;
+    }
+    $business = [
+        'telephone' => '+' . $phone,
+        'streetAddress' => wp_html_excerpt(sanitize_text_field(was_request_value($_POST, 'was_business_street')), 150),
+        'postalCode' => $postcode === '' ? '' : substr($postcode, 0, 5) . '-' . substr($postcode, -3),
+    ];
+    if (update_option('was_site_business', $business, true)) {
+        was_site_purge_information_cache();
+        return true;
+    }
+    return was_site_business_settings() === $business;
 }
 
 function was_site_enable() {
@@ -134,7 +189,12 @@ function was_site_enable() {
         return false;
     }
 
-    update_option('was_site_settings', ['enabled' => true, 'pages' => $pages, 'previous_reading' => $reading], true);
+    update_option('was_site_settings', [
+        'enabled' => true,
+        'pages' => $pages,
+        'previous_reading' => $reading,
+        'information_pages_ready' => true,
+    ], true);
     if (empty(was_site_settings()['enabled'])) {
         return false;
     }
@@ -148,92 +208,6 @@ function was_site_enable() {
         was_site_disable();
         return false;
     }
+    was_site_purge_information_cache(true);
     return true;
-}
-
-function was_site_additional_pages() {
-    return [
-        'login' => ['Entrar', 'entrar', ''],
-        'register' => ['Criar conta', 'criar-conta', ''],
-        'about' => ['Sobre', 'sobre', ''],
-        'contact' => ['Contato', 'contato', ''],
-        'terms' => ['Termos de Uso', 'termos-de-uso', ''],
-        'privacy' => ['Política de Privacidade', 'politica-de-privacidade', ''],
-    ];
-}
-
-function was_site_complete() {
-    $site = was_site_settings();
-    if (empty($site['enabled'])) {
-        return false;
-    }
-    $pages = was_site_prepare_pages(was_site_additional_pages(), $site['pages'], $site['previous_reading']);
-    if (!$pages) {
-        return false;
-    }
-    $site['pages'] = $pages;
-    update_option('was_site_settings', $site, true);
-    return was_site_settings()['pages'] === $pages;
-}
-
-function was_site_prepare_pages(array $definitions, array $pages, array $reading) {
-    foreach ($definitions as $role => [$title, $slug, $shortcode]) {
-        $page_id = was_site_find_page($role, $shortcode, $pages[$role] ?? 0, $reading);
-        if (!$page_id || in_array($page_id, array_diff_key($pages, [$role => true]), true)) {
-            $content = $shortcode ? '[' . $shortcode . ']' : '';
-            if (in_array($role, ['about', 'contact', 'terms', 'privacy'], true)) {
-                $content = file_get_contents(dirname(__DIR__) . '/views/site/content/' . $role . '.html');
-                if ($content === false) {
-                    return false;
-                }
-            }
-            $page_id = wp_insert_post([
-                'post_title' => $title,
-                'post_name' => $slug,
-                'post_content' => wp_slash($content),
-                'post_type' => 'page',
-                'post_status' => 'publish',
-                'comment_status' => 'closed',
-                'meta_input' => ['_was_site_role' => $role],
-            ], true);
-        }
-        if (is_wp_error($page_id) || !$page_id) {
-            return false;
-        }
-        $pages[$role] = (int) $page_id;
-    }
-    return $pages;
-}
-
-function was_site_find_page($role, $shortcode, $saved_id, array $reading) {
-    $candidates = [$saved_id];
-    if ($role === 'dashboard') {
-        $candidates[] = $reading['page_on_front'];
-    } elseif ($role === 'blog') {
-        $candidates[] = $reading['page_for_posts'];
-    }
-
-    foreach (array_filter($candidates) as $id) {
-        $page = get_post($id);
-        if ($page && $page->post_type === 'page' && $page->post_status === 'publish'
-            && (!$shortcode || has_shortcode($page->post_content, $shortcode))) {
-            return (int) $page->ID;
-        }
-    }
-
-    $query = ['post_type' => 'page', 'post_status' => 'publish', 'posts_per_page' => 1, 'fields' => 'ids'];
-    $owned = get_posts($query + ['meta_key' => '_was_site_role', 'meta_value' => $role]);
-    if ($owned && (!$shortcode || has_shortcode(get_post_field('post_content', $owned[0]), $shortcode))) {
-        return (int) $owned[0];
-    }
-
-    if ($shortcode) {
-        $query['posts_per_page'] = 20;
-        foreach (get_posts($query + ['s' => $shortcode]) as $id) {
-            if (has_shortcode(get_post_field('post_content', $id), $shortcode)) {
-                return (int) $id;
-            }
-        }
-    }
-    return 0;
 }
