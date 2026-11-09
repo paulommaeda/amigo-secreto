@@ -31,6 +31,8 @@ Com os layouts ativos e o site visível para buscadores, o plugin declara em `ro
 - **`/mcp`** atende clientes MCP por Streamable HTTP. O Server Card fica em **`/mcp/server-card`** e em **`/.well-known/mcp/server-card.json`**. O catálogo de descoberta fica em **`/.well-known/ai-catalog.json`**.
 - Em navegadores compatíveis, o WebMCP registra duas ferramentas na home. Elas consultam o guia do sorteio e pesquisam artigos públicos.
 
+Um arquivo físico na raiz do servidor tem prioridade sobre o `/llms.txt` gerado pelo WordPress. Se ele foi criado pelo Hostinger Tools, abra **Hostinger → Tools → LLM Optimization** e desative **Create LLMs.txt file**. A Hostinger remove o arquivo que ela gerou e a URL passa a servir o índice dinâmico do Amigo Secreto. **Configurações → Amigo Secreto** mostra um aviso quando há um arquivo estático na raiz. [Documentação da Hostinger](https://www.hostinger.com/support/how-to-enable-llms-txt-on-your-website/)
+
 Depois de atualizar, limpe o cache de páginas. Se o LiteSpeed servir a versão HTML em cache antes do WordPress para pedidos Markdown, adicione esta regra no `.htaccess` da raiz, antes do bloco do LiteSpeed Cache. A regra deixa o cache da home habilitado para visitas que pedem HTML.
 
 ```apache
