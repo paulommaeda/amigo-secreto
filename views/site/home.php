@@ -9,6 +9,7 @@ $start_url = was_site_dashboard_url(true);
 $latest = was_site_public_articles(3);
 $steps = was_site_steps();
 $questions = was_site_questions();
+$site_host = wp_parse_url(home_url('/'), PHP_URL_HOST);
 ?>
 <main id="was-site-content">
     <section class="was-site-hero">
@@ -21,6 +22,12 @@ $questions = was_site_questions();
                     <a class="was-site-btn was-site-btn-primary" href="<?php echo esc_url($start_url); ?>">Criar meu sorteio <?php was_site_icon('arrow'); ?></a>
                     <a class="was-site-btn was-site-btn-secondary" href="#como-funciona">Como funciona</a>
                 </div>
+                <nav class="was-site-institutional-links" aria-label="Informações do site">
+                    <?php foreach (was_site_information_navigation() as $link) : ?>
+                        <?php $href = wp_parse_url($link['url'], PHP_URL_HOST) === $site_host ? wp_make_link_relative($link['url']) : $link['url']; ?>
+                        <a class="was-site-text-link" href="<?php echo esc_url($href); ?>" rel="<?php echo esc_attr($link['rel']); ?>"><?php echo esc_html($link['label']); ?></a>
+                    <?php endforeach; ?>
+                </nav>
             </div>
             <div class="was-site-hero-visual" aria-hidden="true">
                 <img src="<?php echo esc_url(plugins_url('assets/site-gift.svg', WAS_PLUGIN_FILE)); ?>" width="600" height="500" alt="" fetchpriority="high">
@@ -105,11 +112,6 @@ $questions = was_site_questions();
             <p class="was-site-kicker">Seu Amigo Secreto</p>
             <h2 id="was-site-institutional-title">Sobre e contato</h2>
             <p>Conheça o projeto de Paulo Maeda, fale com o suporte e consulte os termos do serviço.</p>
-            <nav class="was-site-institutional-links" aria-label="Informações do site">
-                <?php foreach (was_site_information_links() as $label => $url) : ?>
-                    <a class="was-site-text-link" href="<?php echo esc_url($url); ?>"><?php echo esc_html($label); ?></a>
-                <?php endforeach; ?>
-            </nav>
         </div>
         <?php require __DIR__ . '/parts/contact-details.php'; ?>
     </section>

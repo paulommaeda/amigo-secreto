@@ -4,7 +4,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+const WAS_SITE_INFORMATION_VERSION = 2;
+
 add_action('init', 'was_site_migrate_information_pages', 20);
+add_action('template_redirect', 'was_site_redirect_information_path', 5);
+add_action('wp_head', 'was_site_information_link_tags', 3);
 
 function was_site_information_pages() {
     return [
@@ -13,6 +17,90 @@ function was_site_information_pages() {
         'terms' => ['Termos de Uso', 'termos-de-uso', ''],
         'privacy' => ['Política de Privacidade', 'politica-de-privacidade', ''],
     ];
+}
+
+function was_site_information_paths() {
+    return [
+        'about' => ['about', 'about'],
+        'contact' => ['contact', 'help'],
+        'terms' => ['terms', 'terms-of-service'],
+        'privacy' => ['privacy-policy', 'privacy-policy'],
+    ];
+}
+
+function was_site_information_path_url($slug) {
+    return home_url(user_trailingslashit('/' . $slug, 'page'));
+}
+
+function was_site_information_navigation() {
+    global $wp_rewrite;
+    static $links = null;
+    if ($links !== null) {
+        return $links;
+    }
+
+    $paths = was_site_information_paths();
+    $pages = was_site_information_pages();
+    $occupied = [];
+    $use_short_paths = $wp_rewrite->using_mod_rewrite_permalinks() && was_site_public_enabled();
+    if ($use_short_paths) {
+        $posts = get_posts([
+            'post_name__in' => array_column($paths, 0),
+            'post_type' => get_post_types(['public' => true]),
+            'post_status' => 'publish',
+            'posts_per_page' => -1,
+            'update_post_meta_cache' => false,
+            'update_post_term_cache' => false,
+        ]);
+        $occupied = array_column($posts, 'ID', 'post_name');
+    }
+
+    $links = [];
+    foreach ($paths as $role => [$slug, $rel]) {
+        $id = was_site_page_id($role);
+        $url = $id ? get_permalink($id) : was_site_page_url($role);
+        if (!$url || ($id && get_post_field('post_password', $id) !== '')) {
+            continue;
+        }
+        if ($id && $use_short_paths && !isset($occupied[$slug])) {
+            $url = was_site_information_path_url($slug);
+        }
+        $links[] = ['label' => $pages[$role][0], 'url' => $url, 'rel' => $rel];
+    }
+    return $links;
+}
+
+function was_site_redirect_information_path() {
+    if (!is_404() || !in_array($_SERVER['REQUEST_METHOD'] ?? 'GET', ['GET', 'HEAD'], true)) {
+        return;
+    }
+
+    global $wp;
+    $path = trim($wp->request, '/');
+    foreach (was_site_information_paths() as $role => [$slug]) {
+        if ($path !== $slug || !was_site_public_enabled()) {
+            continue;
+        }
+        $id = was_site_page_id($role);
+        if (!$id || get_post_field('post_password', $id) !== '') {
+            return;
+        }
+        $url = get_permalink($id);
+        if ($url && untrailingslashit($url) !== untrailingslashit(was_site_information_path_url($slug))
+            && wp_safe_redirect($url, 301, 'Seu Amigo Secreto')) {
+            exit;
+        }
+        return;
+    }
+}
+
+function was_site_information_link_tags() {
+    if (!is_front_page() || was_site_view() !== 'home') {
+        return;
+    }
+    foreach (was_site_information_navigation() as $link) {
+        printf("<link rel=\"%s\" href=\"%s\">\n", esc_attr($link['rel']), esc_url($link['url']));
+    }
 }
 
 function was_site_additional_pages() {
@@ -24,7 +112,7 @@ function was_site_additional_pages() {
 
 function was_site_migrate_information_pages() {
     $site = was_site_settings();
-    if (!empty($site['enabled']) && empty($site['information_pages_ready'])) {
+    if (!empty($site['enabled']) && ($site['information_pages_version'] ?? 0) !== WAS_SITE_INFORMATION_VERSION) {
         was_site_complete(true);
     }
 }
@@ -53,7 +141,7 @@ function was_site_complete($automatic = false) {
         if (empty($site['enabled'])) {
             return false;
         }
-        if ($automatic && !empty($site['information_pages_ready'])) {
+        if ($automatic && ($site['information_pages_version'] ?? 0) === WAS_SITE_INFORMATION_VERSION) {
             return true;
         }
 
@@ -68,7 +156,8 @@ function was_site_complete($automatic = false) {
         }
 
         $site['pages'] = $pages;
-        $site['information_pages_ready'] = true;
+        unset($site['information_pages_ready']);
+        $site['information_pages_version'] = WAS_SITE_INFORMATION_VERSION;
         if (update_option('was_site_settings', $site, true)) {
             was_site_purge_information_cache(true);
             return true;

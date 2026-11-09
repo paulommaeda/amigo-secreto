@@ -92,6 +92,9 @@ function was_site_purge_information_cache($include_robots = false) {
     if ($include_robots) {
         $urls[] = home_url('/robots.txt');
         $urls[] = wp_sitemaps_get_server()->index->get_index_url();
+        foreach (was_site_information_paths() as [$slug]) {
+            $urls[] = was_site_information_path_url($slug);
+        }
     }
     foreach (['about', 'contact', 'terms', 'privacy'] as $role) {
         $url = was_site_page_url($role);

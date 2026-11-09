@@ -193,7 +193,7 @@ function was_site_enable() {
         'enabled' => true,
         'pages' => $pages,
         'previous_reading' => $reading,
-        'information_pages_ready' => true,
+        'information_pages_version' => WAS_SITE_INFORMATION_VERSION,
     ], true);
     if (empty(was_site_settings()['enabled'])) {
         return false;

@@ -22,6 +22,8 @@ O botão **Desativar layouts do site** recupera a configuração anterior de lei
 
 Em sites com os layouts ativos, a versão 22.4.2 prepara as páginas institucionais que estiverem faltando, incluindo **Contato**, no primeiro carregamento do WordPress. Sobre, Contato, Termos de Uso e Política de Privacidade ficam ligados na home e seus textos podem ser editados em **Páginas**. Use **Configurações → Amigo Secreto → Dados públicos de contato** para atualizar o telefone ou publicar rua e CEP de um endereço comercial. O painel **Adicionar novas páginas** pode completar as páginas de acesso e repor páginas institucionais ausentes.
 
+A home também identifica as páginas institucionais com relações HTML e oferece os endereços curtos `/about/`, `/contact/`, `/terms/` e `/privacy-policy/` quando disponíveis. Esses endereços redirecionam às páginas canônicas em português.
+
 ## SEO e acesso por agentes
 
 Com os layouts ativos e o site visível para buscadores, o plugin declara em `robots.txt` as preferências de busca, uso em respostas de IA e treinamento. A resposta virtual do WordPress tem cache de até cinco minutos. Depois da atualização, limpe também o cache da hospedagem ou CDN se a auditoria ainda receber o arquivo antigo. O sitemap nativo usa as datas das páginas e publicações. Login, cadastro, painel e convites ficam fora do sitemap e têm sinal de desindexação. A home, os artigos e as páginas institucionais recebem metadados de busca e compartilhamento e dados estruturados. Se houver um plugin de SEO compatível ativo, ele controla os metadados HTML.

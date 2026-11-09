@@ -160,6 +160,9 @@ function was_site_guide_markdown() {
 
 function was_site_home_markdown() {
     $links = ['Criar conta' => was_site_auth_url('register', true), 'Entrar' => was_site_auth_url('login')] + was_site_public_links();
+    foreach (was_site_information_navigation() as $link) {
+        $links[$link['label']] = $link['url'];
+    }
     $links += was_site_contact_links();
     $articles = was_site_markdown_articles(was_site_public_articles(3));
     return "# Sorteio de Amigo Secreto Online Grátis\n\n"
