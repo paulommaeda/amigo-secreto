@@ -14,4 +14,4 @@ Requer WordPress 5.8 e PHP 7.4 ou superiores. Se estiver migrando da versão 22.
 
 Para publicar uma nova versão, atualize o cabeçalho `Version` e a constante `WAS_VERSION` em `wp-amigo-secreto.php` no mesmo commit que contém as mudanças. Envie esse commit para a branch `main`. O WordPress compara a versão publicada e oferece **Atualizar agora** em **Painel → Atualizações** e em **Plugins**.
 
-O pacote oferecido vem do commit da versão detectada. A consulta ao GitHub usa cache de uma hora. **Painel → Atualizações → Verificar novamente** limpa o cache da consulta do plugin. A instalação usa o fluxo padrão de atualizações do WordPress.
+O pacote oferecido vem do commit da versão detectada. A consulta ao GitHub usa cache de uma hora. **Painel → Atualizações → Verificar novamente** limpa o cache da consulta do plugin. Em **Plugins**, também é possível optar pelas atualizações automáticas do WordPress.

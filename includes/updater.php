@@ -20,7 +20,7 @@ function was_github_plugin_update($update, $plugin_data, $plugin_file) {
     }
 
     $release = was_get_github_version();
-    if (!$release || version_compare($release['version'], $plugin_data['Version'], '<=')) {
+    if (!$release) {
         return $update;
     }
 
