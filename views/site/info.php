@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 require __DIR__ . '/header.php';
-$is_about = was_site_current_role(['about']) === 'about';
+$role = was_site_current_role(['about', 'contact']);
 ?>
 <main id="was-site-content">
     <?php while (have_posts()) : ?>
@@ -13,9 +13,9 @@ $is_about = was_site_current_role(['about']) === 'about';
         <article class="was-site-article">
             <header class="was-site-article-head">
                 <div class="was-site-wrap was-site-reading">
-                    <p class="was-site-kicker"><?php echo $is_about ? 'Sobre o projeto' : 'Informações do site'; ?></p>
+                    <p class="was-site-kicker"><?php echo esc_html(['about' => 'Sobre o projeto', 'contact' => 'Fale com a gente'][$role] ?? 'Informações do site'); ?></p>
                     <h1><?php the_title(); ?></h1>
-                    <?php if (!$is_about) : ?>
+                    <?php if (!$role) : ?>
                         <p class="was-site-article-byline">Atualizado em <time datetime="<?php echo esc_attr(get_the_modified_date(DATE_W3C)); ?>"><?php echo esc_html(get_the_modified_date('d/m/Y')); ?></time></p>
                     <?php endif; ?>
                 </div>

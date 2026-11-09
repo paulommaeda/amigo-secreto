@@ -29,15 +29,13 @@ $view = was_site_view();
             <span>Amigo Secreto</span>
         </a>
 
-        <?php if ($view !== 'auth') : ?>
-            <nav class="was-site-nav" aria-label="Navegação principal">
-                <a href="<?php echo esc_url($home_url . '#como-funciona'); ?>">Como funciona</a>
-                <a href="<?php echo esc_url($blog_url); ?>"<?php echo in_array($view, ['blog', 'article'], true) ? ' aria-current="true"' : ''; ?>>Blog</a>
-                <?php if ($about_url) : ?>
-                    <a href="<?php echo esc_url($about_url); ?>"<?php echo was_site_current_role(['about']) ? ' aria-current="page"' : ''; ?>>Sobre</a>
-                <?php endif; ?>
-            </nav>
-        <?php endif; ?>
+        <nav class="was-site-nav" aria-label="Navegação principal">
+            <a href="<?php echo esc_url($home_url . '#como-funciona'); ?>">Como funciona</a>
+            <a href="<?php echo esc_url($blog_url); ?>"<?php echo in_array($view, ['blog', 'article'], true) ? ' aria-current="true"' : ''; ?>>Blog</a>
+            <?php if ($about_url) : ?>
+                <a href="<?php echo esc_url($about_url); ?>"<?php echo was_site_current_role(['about']) ? ' aria-current="page"' : ''; ?>>Sobre</a>
+            <?php endif; ?>
+        </nav>
 
         <div class="was-site-header-actions">
             <a class="was-site-login" href="<?php echo esc_url(was_site_dashboard_url()); ?>"><?php echo is_user_logged_in() ? 'Meu painel' : 'Entrar'; ?></a>

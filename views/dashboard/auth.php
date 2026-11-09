@@ -18,10 +18,10 @@ $name = $was_auth_view === 'register' ? was_request_value($_POST, 'user_name') :
 ?>
 <div class="was-auth-layout">
     <section class="was-auth-intro" aria-labelledby="<?php echo esc_attr($id . 'heading'); ?>">
-        <p class="was-auth-eyebrow"><?php echo esc_html($eyebrow); ?></p>
+        <p class="was-auth-eyebrow was-site-kicker was-site-pill"><?php was_site_icon($view === 'recover' ? 'lock' : 'sparkle'); ?> <?php echo esc_html($eyebrow); ?></p>
         <h1 id="<?php echo esc_attr($id . 'heading'); ?>"><?php echo esc_html($headline); ?></h1>
         <p class="was-auth-description"><?php echo esc_html($intro); ?></p>
-        <div class="was-auth-illustration"><?php was_site_icon($view === 'recover' ? 'lock' : 'gift'); ?></div>
+        <img class="was-auth-illustration" src="<?php echo esc_url(plugins_url('assets/site-gift.svg', WAS_PLUGIN_FILE)); ?>" width="600" height="500" alt="">
     </section>
 
     <section class="was-auth-card" aria-labelledby="<?php echo esc_attr($id . 'title'); ?>">
@@ -81,7 +81,7 @@ $name = $was_auth_view === 'register' ? was_request_value($_POST, 'user_name') :
                 <a class="was-auth-recover" href="<?php echo esc_url(was_site_auth_url('recover', $create)); ?>">Esqueceu a senha?</a>
             <?php endif; ?>
 
-            <button type="submit" class="was-auth-submit">
+            <button type="submit" class="was-auth-submit was-site-btn was-site-btn-primary">
                 <?php echo esc_html(['login' => 'Entrar', 'register' => 'Criar conta e continuar', 'recover' => 'Enviar link'][$view]); ?>
                 <?php was_site_icon('arrow'); ?>
             </button>

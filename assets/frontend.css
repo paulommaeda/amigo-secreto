@@ -509,18 +509,22 @@ body:not(.was-page) .was-app {
 }
 
 .was-auth-layout {
-    --was-auth-ink: #322132;
-    --was-auth-muted: #665363;
-    --was-auth-accent: #703653;
-    --was-auth-line: #d9cbd4;
+    --was-auth-ink: var(--was-site-ink, #fff6f8);
+    --was-auth-muted: var(--was-site-muted, #c5bacf);
+    --was-auth-accent: var(--was-site-pink, #ffb4bc);
+    --was-auth-line: var(--was-site-line, #3e304a);
+    color-scheme: dark;
     box-sizing: border-box;
     display: grid;
     grid-template-columns: minmax(0, .85fr) minmax(0, 1fr);
     align-items: center;
     gap: clamp(25px, 6vw, 84px);
     width: 100%;
-    padding: clamp(36px, 6vw, 82px) max(20px, calc((100% - 1010px) / 2));
-    background: #faf4f0;
+    padding: clamp(36px, 6vw, 82px) max(24px, calc((100% - 1080px) / 2));
+    background:
+        radial-gradient(ellipse at 16% 0%, #67345252, transparent 53%),
+        radial-gradient(ellipse at 83% 35%, #6a3a742d, transparent 52%),
+        var(--was-site-bg, #141019);
     color: var(--was-auth-ink);
     font: 16px/1.55 system-ui, -apple-system, sans-serif;
 }
@@ -535,7 +539,14 @@ body:not(.was-page) .was-app {
 }
 
 .was-auth-eyebrow {
-    margin: 0 0 11px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 13px;
+    padding: 7px 10px;
+    border: 1px solid #f4b2c137;
+    border-radius: 30px;
+    background: #ffb5d010;
     color: var(--was-auth-accent);
     font-size: .74rem;
     font-weight: 780;
@@ -559,15 +570,10 @@ body:not(.was-page) .was-app {
 }
 
 .was-auth-illustration {
-    display: grid;
-    place-items: center;
-    width: 90px;
-    height: 90px;
-    margin: 28px 0 0 6px;
-    border-radius: 23px;
-    transform: rotate(-9deg);
-    background: #f2dce8;
-    color: var(--was-auth-accent);
+    display: block;
+    width: min(100%, 310px);
+    height: auto;
+    margin-top: 6px;
 }
 
 .was-auth-layout svg {
@@ -580,18 +586,13 @@ body:not(.was-page) .was-app {
     stroke-linejoin: round;
 }
 
-.was-auth-illustration svg {
-    width: 47px;
-    height: 47px;
-}
-
 .was-auth-card {
     min-width: 0;
     padding: clamp(20px, 3.6vw, 36px);
     border: 1px solid var(--was-auth-line);
-    border-radius: 17px;
-    background: #fffdfb;
-    box-shadow: 0 16px 42px #44233f12;
+    border-radius: var(--was-site-radius, 24px);
+    background: var(--was-site-panel, #211929);
+    box-shadow: 0 16px 42px #100b1666;
 }
 
 .was-auth-card h2 {
@@ -613,16 +614,16 @@ body:not(.was-page) .was-app {
     width: 100%;
     min-height: 46px;
     padding: 9px 11px;
-    border: 1px solid #bcaeb9;
-    border-radius: 8px;
-    background: #fff;
+    border: 1px solid #685671;
+    border-radius: 10px;
+    background: var(--was-site-bg, #141019);
     color: var(--was-auth-ink);
     font: inherit;
     font-size: 16px;
 }
 
 .was-auth-field input::placeholder {
-    color: #827682;
+    color: #b4a7bc;
 }
 
 .was-auth-password {
@@ -641,7 +642,7 @@ body:not(.was-page) .was-app {
     padding: 0 9px;
     border: 0;
     border-radius: 6px;
-    background: #f6edf3;
+    background: var(--was-site-panel, #211929);
     color: var(--was-auth-accent);
     font: inherit;
     font-size: .8rem;
@@ -678,16 +679,16 @@ body:not(.was-page) .was-app {
     min-height: 47px;
     padding: 9px 12px;
     border: 0;
-    border-radius: 8px;
-    background: #68354f;
-    color: #fff;
+    border-radius: 12px;
+    background: var(--was-site-primary, linear-gradient(106deg, #ffc0a8, #f6a7d3));
+    color: #261527;
     font: inherit;
     font-weight: 740;
     cursor: pointer;
 }
 
 .was-auth-submit:hover {
-    background: #542641;
+    background: var(--was-site-primary-hover, linear-gradient(106deg, #ffd1b7, #ffb6de));
 }
 
 .was-auth-layout .was-alert {
@@ -695,15 +696,15 @@ body:not(.was-page) .was-app {
 }
 
 .was-auth-layout .was-alert-error {
-    background: #fff0f0;
-    color: #a22543;
-    border-color: #eab7c5;
+    background: #3d2232;
+    color: #ffd2da;
+    border-color: #80506a;
 }
 
 .was-auth-layout .was-alert-success {
-    background: #ecf9f2;
-    color: #175b43;
-    border-color: #b3dbc9;
+    background: #1f342e;
+    color: #b9eed9;
+    border-color: #456c5e;
 }
 
 @media (max-width: 680px) {

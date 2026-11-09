@@ -35,7 +35,7 @@ function was_site_page_url($role) {
     if ($role === 'privacy') {
         return get_privacy_policy_url();
     }
-    if ($role === 'terms' || $role === 'about') {
+    if (in_array($role, ['terms', 'about', 'contact'], true)) {
         return '';
     }
     return home_url('/');
@@ -105,7 +105,7 @@ function was_site_view() {
     if (was_site_current_role(['login', 'register'])) {
         return 'auth';
     }
-    if (was_site_current_role(['about', 'terms', 'privacy'])) {
+    if (was_site_current_role(['about', 'contact', 'terms', 'privacy'])) {
         return 'info';
     }
     if (is_404()) {

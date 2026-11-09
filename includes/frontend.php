@@ -8,7 +8,6 @@ add_shortcode('amigo_secreto_dashboard', 'was_frontend_dashboard');
 add_shortcode('amigo_secreto', 'was_public_shortcode');
 add_shortcode('amigo_secreto_tutorial', 'was_tutorial_shortcode');
 add_action('wp_enqueue_scripts', 'was_enqueue_page_assets');
-add_action('wp_head', 'was_inject_seo_tags', 1);
 add_filter('body_class', 'was_body_class');
 add_action('after_setup_theme', 'was_remove_admin_bar');
 add_action('template_redirect', 'was_handle_frontend_forms');
@@ -109,34 +108,4 @@ function was_tutorial_shortcode() {
     ob_start();
     require dirname(__DIR__) . '/views/tutorial.php';
     return ob_get_clean();
-}
-
-function was_inject_seo_tags() {
-    if (!was_page_features()) {
-        return;
-    }
-
-    $post = get_queried_object();
-    $url = get_permalink($post);
-    $title = get_the_title($post) . ' | Sorteio de Amigo Secreto Online';
-    $description = 'Crie seu Sorteio de Amigo Secreto online com revelação por PIN e convites pelo WhatsApp.';
-    $schema = [
-        '@context' => 'https://schema.org',
-        '@type' => 'WebApplication',
-        'name' => 'Gerador de Amigo Secreto Online',
-        'url' => $url,
-        'description' => $description,
-        'applicationCategory' => 'UtilityApplication',
-        'operatingSystem' => 'All',
-        'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'BRL'],
-    ];
-    ?>
-    <meta name="description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:title" content="<?php echo esc_attr($title); ?>">
-    <meta property="og:description" content="<?php echo esc_attr($description); ?>">
-    <meta property="og:url" content="<?php echo esc_url($url); ?>">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Amigo Secreto Online">
-    <script type="application/ld+json"><?php echo wp_json_encode($schema, JSON_HEX_TAG | JSON_HEX_AMP); ?></script>
-    <?php
 }

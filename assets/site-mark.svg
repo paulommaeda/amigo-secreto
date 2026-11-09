@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <title>Seu Amigo Secreto</title>
+  <rect width="192" height="192" rx="43" fill="#472b47"/>
+  <g transform="translate(35 35) scale(5.1)" fill="none" stroke="#ffd3bf" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="8" width="18" height="5" rx="1"/>
+    <path d="M5 13v8h14v-8M12 8v13m0-13H8.5a2.5 2.5 0 1 1 2.3-3.5L12 8Zm0 0h3.5a2.5 2.5 0 1 0-2.3-3.5L12 8Z"/>
+  </g>
+</svg>

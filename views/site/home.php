@@ -6,20 +6,9 @@ if (!defined('ABSPATH')) {
 
 require __DIR__ . '/header.php';
 $start_url = was_site_dashboard_url(true);
-$latest = get_posts(['post_type' => 'post', 'post_status' => 'publish', 'posts_per_page' => 3, 'has_password' => false]);
-$steps = [
-    ['Abra o seu grupo', 'Crie sua conta de organizador, dê um nome ao grupo e abra as inscrições.'],
-    ['Envie o convite', 'Compartilhe o link pelo WhatsApp. Cada pessoa preenche seus dados e recebe um PIN.'],
-    ['Realize o sorteio', 'Confira os inscritos no painel. Com pelo menos três pessoas, clique em Realizar sorteio.'],
-    ['Descubra quem saiu', 'Os resultados são enviados por e-mail. Cada participante também pode consultar o seu pelo link e pelo PIN.'],
-];
-$questions = [
-    ['Quem precisa de conta?', 'O organizador usa uma conta para criar e gerenciar os grupos. Os convidados se inscrevem pelo link com nome, e-mail e WhatsApp.'],
-    ['Quantas pessoas podem participar?', 'São necessárias pelo menos três pessoas. Confira os inscritos no painel antes de realizar o sorteio.'],
-    ['Como consulto quem eu tirei?', 'Abra o link do convite depois do sorteio e digite o seu PIN de quatro dígitos. Você também pode conferir o resultado enviado ao seu e-mail.'],
-    ['Como recupero o PIN?', 'Abra o link do evento e selecione Esqueci meu PIN. Informe o e-mail e o WhatsApp usados na inscrição.'],
-    ['Posso refazer o sorteio?', 'O organizador pode reabrir as inscrições pelo painel e realizar um novo sorteio.'],
-];
+$latest = was_site_public_articles(3);
+$steps = was_site_steps();
+$questions = was_site_questions();
 ?>
 <main id="was-site-content">
     <section class="was-site-hero">
@@ -27,7 +16,7 @@ $questions = [
             <div class="was-site-hero-copy">
                 <p class="was-site-kicker was-site-pill"><?php was_site_icon('sparkle'); ?> Sorteio online de amigo secreto</p>
                 <h1>Organize seu<br> <span>amigo secreto</span><br> com um link.</h1>
-                <p class="was-site-intro">Crie o grupo, convide pelo WhatsApp e sorteie quando todos entrarem. Cada participante recebe um PIN para consultar o resultado.</p>
+                <p class="was-site-intro"><?php echo esc_html(was_site_intro()); ?></p>
                 <div class="was-site-actions">
                     <a class="was-site-btn was-site-btn-primary" href="<?php echo esc_url($start_url); ?>">Criar meu sorteio <?php was_site_icon('arrow'); ?></a>
                     <a class="was-site-btn was-site-btn-secondary" href="#como-funciona">Como funciona</a>

@@ -43,7 +43,7 @@ function was_site_admin_page() {
                 <?php endforeach; ?>
             </ul>
             <?php if (array_diff_key(was_site_additional_pages(), $links)) : ?>
-                <p>Prepare as páginas de login, cadastro, Sobre, Termos de Uso e Política de Privacidade. Os textos ficam editáveis em <strong>Páginas</strong>.</p>
+                <p>Adicione as páginas que ainda faltam. Os textos de Sobre, Contato, Termos de Uso e Política de Privacidade ficam editáveis em <strong>Páginas</strong>.</p>
                 <?php was_site_settings_form('complete', 'Adicionar novas páginas'); ?>
             <?php endif; ?>
             <p>Você pode desativar os layouts para voltar à página inicial e à configuração de blog anteriores.</p>
@@ -133,6 +133,7 @@ function was_site_additional_pages() {
         'login' => ['Entrar', 'entrar', ''],
         'register' => ['Criar conta', 'criar-conta', ''],
         'about' => ['Sobre', 'sobre', ''],
+        'contact' => ['Contato', 'contato', ''],
         'terms' => ['Termos de Uso', 'termos-de-uso', ''],
         'privacy' => ['Política de Privacidade', 'politica-de-privacidade', ''],
     ];
@@ -157,7 +158,7 @@ function was_site_prepare_pages(array $definitions, array $pages, array $reading
         $page_id = was_site_find_page($role, $shortcode, $pages[$role] ?? 0, $reading);
         if (!$page_id || in_array($page_id, array_diff_key($pages, [$role => true]), true)) {
             $content = $shortcode ? '[' . $shortcode . ']' : '';
-            if (in_array($role, ['about', 'terms', 'privacy'], true)) {
+            if (in_array($role, ['about', 'contact', 'terms', 'privacy'], true)) {
                 $content = file_get_contents(dirname(__DIR__) . '/views/site/content/' . $role . '.html');
                 if ($content === false) {
                     return false;

@@ -20,7 +20,29 @@ Em **Configurações → Amigo Secreto**, clique em **Ativar site do Amigo Secre
 
 O botão **Desativar layouts do site** recupera a configuração anterior de leitura nas páginas que o plugin definiu. As páginas criadas e os posts ficam disponíveis no WordPress.
 
-Se os layouts já estavam ativos na versão 22.2.0, abra **Configurações → Amigo Secreto → Adicionar novas páginas**. O painel cria as páginas de acesso e as páginas **Sobre**, **Termos de Uso** e **Política de Privacidade**. Os textos institucionais podem ser editados em **Páginas**.
+Se os layouts já estavam ativos, abra **Configurações → Amigo Secreto → Adicionar novas páginas** quando houver páginas novas na atualização. O painel cria as páginas que faltam, incluindo **Contato** na versão 22.4.0. Os textos institucionais podem ser editados em **Páginas**.
+
+## SEO e acesso por agentes
+
+Com os layouts ativos e o site visível para buscadores, o plugin declara em `robots.txt` as preferências de busca, uso em respostas de IA e treinamento. O sitemap nativo usa as datas das páginas e publicações. Login, cadastro, painel e convites ficam fora do sitemap e têm sinal de desindexação. A home, os artigos e as páginas institucionais recebem metadados de busca e compartilhamento e dados estruturados. Se houver um plugin de SEO compatível ativo, ele controla os metadados HTML.
+
+- **`/llms.txt`** lista as páginas públicas e os artigos recentes.
+- **`/index.md`** oferece a versão Markdown da home. A home também responde em Markdown quando o cabeçalho `Accept: text/markdown` é preferido.
+- **`/mcp`** atende clientes MCP por Streamable HTTP. O Server Card fica em **`/mcp/server-card`** e em **`/.well-known/mcp/server-card.json`**. O catálogo de descoberta fica em **`/.well-known/ai-catalog.json`**.
+- Em navegadores compatíveis, o WebMCP registra duas ferramentas na home. Elas consultam o guia do sorteio e pesquisam artigos públicos.
+
+Depois de atualizar, limpe o cache de páginas. Se o LiteSpeed servir a versão HTML em cache antes do WordPress para pedidos Markdown, adicione esta regra no `.htaccess` da raiz, antes do bloco do LiteSpeed Cache. A regra deixa o cache da home habilitado para visitas que pedem HTML.
+
+```apache
+<IfModule LiteSpeed>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/$
+RewriteCond %{HTTP:Accept} text/markdown [NC]
+RewriteRule ^ - [E=Cache-Control:no-cache]
+</IfModule>
+```
+
+Para verificar, faça uma requisição com `curl -i -H 'Accept: text/markdown' https://seuamigosecreto.com.br/` e confira `Content-Type: text/markdown`.
 
 ## FluentCRM
 

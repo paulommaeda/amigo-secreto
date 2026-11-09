@@ -6,6 +6,8 @@ body.was-site {
     --was-site-line: #3e304a;
     --was-site-pink: #ffb4bc;
     --was-site-lilac: #d7c4ff;
+    --was-site-primary: linear-gradient(106deg, #ffc0a8, #f6a7d3);
+    --was-site-primary-hover: linear-gradient(106deg, #ffd1b7, #ffb6de);
     --was-site-radius: 24px;
     margin: 0;
     background-color: var(--was-site-bg);
@@ -144,12 +146,12 @@ body.was-site {
 }
 
 .was-site-btn-primary {
-    background: linear-gradient(106deg, #ffc0a8, #f6a7d3);
+    background: var(--was-site-primary);
     color: #261527;
 }
 
 .was-site-btn-primary:hover {
-    background: linear-gradient(106deg, #ffd1b7, #ffb6de);
+    background: var(--was-site-primary-hover);
     color: #261527;
 }
 
@@ -639,6 +641,13 @@ body.was-site {
     font-size: .87rem;
 }
 
+.was-site-footer-email {
+    display: inline-block;
+    color: var(--was-site-pink);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+}
+
 .was-site-footer nav {
     display: flex;
     flex-wrap: wrap;
@@ -946,34 +955,6 @@ body.was-site {
     cursor: pointer;
 }
 
-.was-site-auth .was-site-header-inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-}
-
-body.was-site-auth, .was-site-auth .was-site-header, .was-site-auth .was-site-footer {
-    --was-site-ink: #322132;
-    --was-site-muted: #665363;
-    --was-site-line: #e2d6de;
-    --was-site-lilac: #703653;
-    background: #faf4f0;
-    color: var(--was-site-ink);
-}
-
-.was-site-auth .was-site-header {
-    background: #fffdfb;
-}
-
-.was-site-auth .was-site-brand-mark {
-    background: #f2dce8;
-    border-color: #dcc3d4;
-    color: #703653;
-}
-
-.was-site-auth .was-site-header .was-site-btn-primary {
-    background: #68354f;
-    color: #fff;
-}
-
 .was-site-missing {
     max-width: 690px;
     padding-block: clamp(55px, 10vw, 110px);
@@ -1052,10 +1033,6 @@ body.was-site-auth, .was-site-auth .was-site-header, .was-site-auth .was-site-fo
 
     .was-site-header-actions {
         gap: 9px;
-    }
-
-    .was-site-auth .was-site-header-inner {
-        padding-block: 9px;
     }
 
     .was-site-hero-grid, .was-site-faq, .was-site-blog-head-inner {
