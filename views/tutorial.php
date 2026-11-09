@@ -68,7 +68,7 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div style="margin-top: 40px; text-align: center;">
-            <a href="<?php echo esc_url(home_url('/')); ?>" class="was-btn was-btn-primary">Criar Meu Sorteio Agora</a>
+            <a href="<?php echo esc_url(was_site_dashboard_url(true)); ?>" class="was-btn was-btn-primary">Criar Meu Sorteio Agora</a>
         </div>
 
     </div>

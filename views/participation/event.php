@@ -11,14 +11,14 @@ if (!defined('ABSPATH')) {
                 <div style="font-size: 48px; margin-bottom: 10px;">🔒</div>
                 <h2 style="margin-top: 0;">Evento Encerrado</h2>
                 <p style="color: var(--was-text-light);">O organizador encerrou este sorteio de Amigo Secreto.</p>
-                <a href="<?php echo esc_url(home_url('/')); ?>" class="was-btn was-btn-primary">Criar meu próprio sorteio</a>
+                <a href="<?php echo esc_url(was_site_dashboard_url(true)); ?>" class="was-btn was-btn-primary">Criar meu próprio sorteio</a>
             </div>
         <?php else : ?>
             <div style="text-align: center; margin-bottom: 15px;">
                 <div style="font-size: 48px; margin-bottom: 10px; filter: drop-shadow(0 0 12px rgba(255,77,109,0.5));">🎁</div>
                 <h1 style="margin: 0; font-size: 26px; color: var(--was-text);">Sorteio de Amigo Secreto<br><?php echo esc_html($group->title); ?></h1>
                 <p style="color: var(--was-text-light); margin-top: 8px;">Convide seus amigos pelo WhatsApp e divirta-se!</p>
-                <a href="<?php echo esc_url(home_url('/como-funciona/')); ?>" class="was-btn was-btn-outline" style="font-size: 13px; padding: 8px 20px; width: auto; border-radius: 99px;">Como funciona?</a>
+                <a href="<?php echo esc_url(was_site_page_url('tutorial')); ?>" class="was-btn was-btn-outline" style="font-size: 13px; padding: 8px 20px; width: auto; border-radius: 99px;">Como funciona?</a>
             </div>
 
             <div class="was-card" style="margin: 10px 0 0; width: 100%;">

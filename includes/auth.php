@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
 }
 
 function was_process_auth_forms() {
-    global $was_auth_notice;
+    global $was_auth_notice, $was_auth_view;
 
     if (is_user_logged_in()) {
         return;
@@ -14,6 +14,7 @@ function was_process_auth_forms() {
     if (!in_array($action, ['login', 'register', 'recover'], true)) {
         return;
     }
+    $was_auth_view = $action;
     if (!wp_verify_nonce(was_request_value($_POST, '_wpnonce'), 'was_' . $action . '_nonce')) {
         $was_auth_notice = was_notice_markup('Sessão expirada. Atualize a página e tente novamente.');
         return;
@@ -44,7 +45,7 @@ function was_process_auth_forms() {
         return;
     }
 
-    wp_safe_redirect(remove_query_arg('was_auth_action'), 303);
+    wp_safe_redirect(remove_query_arg(['was_auth_action', 'was_auth']), 303);
     exit;
 }
 

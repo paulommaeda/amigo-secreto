@@ -78,13 +78,17 @@ function was_update_profile($user) {
 }
 
 function was_render_dashboard() {
-    global $wpdb, $was_auth_notice, $was_dashboard_notice;
+    global $wpdb, $was_auth_notice, $was_auth_view, $was_dashboard_notice;
 
     $views = dirname(__DIR__) . '/views/dashboard/';
     ob_start();
     echo '<div class="was-app"><div class="was-app-container">';
 
     if (!is_user_logged_in()) {
+        $auth_view = $was_auth_view ?? was_request_value($_GET, 'was_auth');
+        if (!in_array($auth_view, ['login', 'register', 'recover'], true)) {
+            $auth_view = 'login';
+        }
         require $views . 'auth.php';
     } else {
         $user = wp_get_current_user();
