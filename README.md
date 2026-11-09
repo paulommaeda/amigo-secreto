@@ -14,11 +14,17 @@ Requer WordPress 5.8 e PHP 7.4 ou superiores. Se estiver migrando da versão 22.
 
 Em **Configurações → Amigo Secreto**, clique em **Ativar site do Amigo Secreto**. O plugin prepara a página inicial pública e o blog, reaproveita o painel e o tutorial quando encontra os shortcodes nas páginas existentes e liga o menu às páginas corretas.
 
-- **Entrar** abre o login do painel. **Criar sorteio** abre o cadastro do organizador e leva à criação do grupo após o acesso.
+- **Entrar** e **Criar conta** têm páginas próprias. Pelo botão **Criar sorteio**, o cadastro leva à criação do grupo após o acesso.
 - Publique pelo menu **Posts**. A página inicial mostra os últimos artigos. O blog usa imagens destacadas, categorias, tags, busca e paginação do WordPress.
 - O site aplica layouts próprios à home, ao painel, aos convites, aos artigos, aos arquivos do blog e à página 404.
 
 O botão **Desativar layouts do site** recupera a configuração anterior de leitura nas páginas que o plugin definiu. As páginas criadas e os posts ficam disponíveis no WordPress.
+
+Se os layouts já estavam ativos na versão 22.2.0, abra **Configurações → Amigo Secreto → Adicionar novas páginas**. O painel cria as páginas de acesso e as páginas **Sobre**, **Termos de Uso** e **Política de Privacidade**. Os textos institucionais podem ser editados em **Páginas**.
+
+## FluentCRM
+
+Quando o FluentCRM está ativo, cada inscrição no sorteio sincroniza nome, e-mail, WhatsApp e tags do grupo. Novos contatos entram com status transacional. Se a pessoa marcar a opção de receber dicas e novidades, a inscrição pode receber o status de inscrito e a tag **Amigo Secreto - Novidades**. O fluxo respeita contatos com descadastro, bloqueio ou reclamação. As novas notas do CRM registram o grupo e a escolha de novidades. O PIN é enviado na confirmação da inscrição pelo e-mail do WordPress.
 
 ## Atualizações pelo WordPress
 

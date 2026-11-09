@@ -5,7 +5,9 @@ if (!defined('ABSPATH')) {
 }
 
 $home_url = was_site_page_url('home');
-$policy_url = get_privacy_policy_url();
+$policy_url = was_site_page_url('privacy');
+$terms_url = was_site_page_url('terms');
+$about_url = was_site_page_url('about');
 ?>
 <footer class="was-site-footer">
     <div class="was-site-wrap">
@@ -21,8 +23,14 @@ $policy_url = get_privacy_policy_url();
                 <a href="<?php echo esc_url($home_url . '#como-funciona'); ?>">Como funciona</a>
                 <a href="<?php echo esc_url($home_url . '#perguntas'); ?>">Perguntas frequentes</a>
                 <a href="<?php echo esc_url(was_site_page_url('blog')); ?>">Blog</a>
+                <?php if ($about_url) : ?>
+                    <a href="<?php echo esc_url($about_url); ?>">Sobre</a>
+                <?php endif; ?>
+                <?php if ($terms_url) : ?>
+                    <a href="<?php echo esc_url($terms_url); ?>">Termos de Uso</a>
+                <?php endif; ?>
                 <?php if ($policy_url) : ?>
-                    <a href="<?php echo esc_url($policy_url); ?>">Política de privacidade</a>
+                    <a href="<?php echo esc_url($policy_url); ?>">Política de Privacidade</a>
                 <?php endif; ?>
             </nav>
         </div>

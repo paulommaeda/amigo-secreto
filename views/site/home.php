@@ -26,7 +26,7 @@ $questions = [
         <div class="was-site-wrap was-site-hero-grid">
             <div class="was-site-hero-copy">
                 <p class="was-site-kicker was-site-pill"><?php was_site_icon('sparkle'); ?> Sorteio online de amigo secreto</p>
-                <h1>Organize seu<br><span>amigo secreto</span><br>com um link.</h1>
+                <h1>Organize seu<br> <span>amigo secreto</span><br> com um link.</h1>
                 <p class="was-site-intro">Crie o grupo, convide pelo WhatsApp e sorteie quando todos entrarem. Cada participante recebe um PIN para consultar o resultado.</p>
                 <div class="was-site-actions">
                     <a class="was-site-btn was-site-btn-primary" href="<?php echo esc_url($start_url); ?>">Criar meu sorteio <?php was_site_icon('arrow'); ?></a>

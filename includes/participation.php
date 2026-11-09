@@ -45,7 +45,7 @@ function was_process_registration($group) {
         return ['notice' => was_notice_markup('Informe um nome, um e-mail válido e o WhatsApp com DDD.')];
     }
     if (was_request_value($_POST, 'was_privacy_policy') === '') {
-        return ['notice' => was_notice_markup('Aceite a política de privacidade para se inscrever.')];
+        return ['notice' => was_notice_markup('Confirme a leitura das informações para se inscrever.')];
     }
 
     $person = was_register_participant($group->id, $name, $email, $phones);
@@ -55,7 +55,7 @@ function was_process_registration($group) {
 
     if (function_exists('FluentCrmApi')) {
         require_once __DIR__ . '/fluentcrm.php';
-        was_sync_fluentcrm($group, $person);
+        was_sync_fluentcrm($group, $person, was_request_value($_POST, 'was_marketing_opt_in') === '1');
     }
     require_once __DIR__ . '/notifications.php';
     return ['pin' => $person['token'], 'sent' => was_send_registration_email($group, $person)];

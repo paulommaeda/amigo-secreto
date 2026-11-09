@@ -12,9 +12,8 @@ if (!defined('ABSPATH')) {
         </div>
 
         <div class="tutorial-header">
-            <div class="tutorial-icon">📱</div>
             <h1 class="tutorial-title">Como Funciona?</h1>
-            <p class="tutorial-subtitle">Veja como é fácil e rápido organizar o seu sorteio de amigo secreto 100% online, seguro e sem confusão.</p>
+            <p class="tutorial-subtitle">Do cadastro do organizador até a consulta do resultado por PIN.</p>
         </div>
 
         <div class="tutorial-step">
@@ -32,7 +31,7 @@ if (!defined('ABSPATH')) {
                 <div class="step-number">2</div>
                 <div class="step-info">
                     <h3 class="step-title">Abra uma Sala de Sorteio</h3>
-                    <p class="step-desc">Clique em "+ Novo" e dê um nome divertido para o seu evento. Ex: <i>Amigo Secreto da Firma</i>.</p>
+                    <p class="step-desc">Clique em “Novo sorteio” e dê um nome ao grupo. Você pode usar <i>Amigo Secreto da Equipe</i>, por exemplo.</p>
                 </div>
             </div>
         </div>

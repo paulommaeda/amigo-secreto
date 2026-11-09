@@ -946,16 +946,32 @@ body.was-site {
     cursor: pointer;
 }
 
-.was-site-app-content {
-    min-height: 60vh;
+.was-site-auth .was-site-header-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
 }
 
-.was-site-app-content .was-app, .was-site-app-content .was-app-container {
-    min-height: 0;
+body.was-site-auth, .was-site-auth .was-site-header, .was-site-auth .was-site-footer {
+    --was-site-ink: #322132;
+    --was-site-muted: #665363;
+    --was-site-line: #e2d6de;
+    --was-site-lilac: #703653;
+    background: #faf4f0;
+    color: var(--was-site-ink);
 }
 
-.was-site-app .was-site-footer {
-    padding-bottom: 70px;
+.was-site-auth .was-site-header {
+    background: #fffdfb;
+}
+
+.was-site-auth .was-site-brand-mark {
+    background: #f2dce8;
+    border-color: #dcc3d4;
+    color: #703653;
+}
+
+.was-site-auth .was-site-header .was-site-btn-primary {
+    background: #68354f;
+    color: #fff;
 }
 
 .was-site-missing {
@@ -1038,6 +1054,10 @@ body.was-site {
         gap: 9px;
     }
 
+    .was-site-auth .was-site-header-inner {
+        padding-block: 9px;
+    }
+
     .was-site-hero-grid, .was-site-faq, .was-site-blog-head-inner {
         grid-template-columns: minmax(0, 1fr);
     }
@@ -1065,6 +1085,29 @@ body.was-site {
         gap: 18px;
     }
 
+    .was-site-hero h1 {
+        text-wrap: balance;
+    }
+
+    .was-site-hero h1 br {
+        display: none;
+    }
+
+    .was-site-hero .was-site-actions {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .was-site-hero-visual {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .was-site-hero-visual img {
+        grid-column: 1 / -1;
+    }
+
     .was-site-brand {
         gap: 6px;
         font-size: .91rem;
@@ -1086,9 +1129,11 @@ body.was-site {
     }
 
     .was-site-float {
+        position: static;
+        min-width: 0;
         gap: 6px;
         padding: 6px 8px 6px 6px;
-        font-size: .71rem;
+        font-size: .77rem;
     }
 
     .was-site-float small {

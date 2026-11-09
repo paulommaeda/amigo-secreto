@@ -3,19 +3,41 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+$fields = [
+    'was_name' => ['Nome completo', 'text', 'name', 100],
+    'was_email' => ['E-mail', 'email', 'email', 100],
+    'was_whatsapp' => ['WhatsApp com DDD', 'tel', 'tel-national', 15],
+];
+$terms_url = was_site_page_url('terms');
+$privacy_url = was_site_page_url('privacy');
+$id = wp_unique_id('was-join-');
 ?>
-<form method="post">
+<form method="post" class="was-event-form">
     <?php wp_nonce_field('reg_' . $group_id, 'was_reg_nonce'); ?>
-    <p style="color: var(--was-text-light); text-align: center; margin-bottom: 24px; font-size: 15px;">Preencha seus dados para participar do sorteio.</p>
-    <label style="font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; color: var(--was-text-light);">Seu Nome e Sobrenome</label>
-    <input type="text" name="was_name" autocomplete="name" maxlength="100" class="was-input" required>
-    <label style="font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; color: var(--was-text-light);">E-mail Válido</label>
-    <input type="email" name="was_email" autocomplete="email" maxlength="100" class="was-input" required>
-    <label style="font-size: 13px; font-weight: 600; margin-bottom: 4px; display: block; color: var(--was-text-light);">WhatsApp</label>
-    <input type="tel" name="was_whatsapp" data-was-phone class="was-input" placeholder="(00) 00000-0000" maxlength="15" required>
-    <div style="margin-bottom: 24px; display: flex; align-items: flex-start; gap: 8px;">
-        <input type="checkbox" name="was_privacy_policy" required style="margin-top: 2px; width: 18px; height: 18px; accent-color: #a855f7;">
-        <span style="font-size: 13px; color: var(--was-text-light);">Aceito participar do grupo e concordo com a <a href="<?php echo esc_url(get_privacy_policy_url() ?: home_url('/politica-de-privacidade/')); ?>" target="_blank" rel="noopener" style="color: var(--was-primary-solid);">Política de Privacidade</a>.</span>
+    <?php foreach ($fields as $name => [$label, $type, $autocomplete, $max]) : ?>
+        <div class="was-event-field">
+            <label for="<?php echo esc_attr($id . $name); ?>"><?php echo esc_html($label); ?></label>
+            <input id="<?php echo esc_attr($id . $name); ?>" type="<?php echo esc_attr($type); ?>" name="<?php echo esc_attr($name); ?>" autocomplete="<?php echo esc_attr($autocomplete); ?>" maxlength="<?php echo esc_attr($max); ?>" value="<?php echo esc_attr(was_request_value($_POST, $name)); ?>" class="was-input"<?php if ($type === 'tel') : ?> placeholder="(00) 00000-0000" data-was-phone<?php endif; ?> required>
+        </div>
+    <?php endforeach; ?>
+    <div class="was-form-check">
+        <input id="<?php echo esc_attr($id . 'terms'); ?>" type="checkbox" name="was_privacy_policy" <?php checked(was_request_value($_POST, 'was_privacy_policy') !== ''); ?> required>
+        <label for="<?php echo esc_attr($id . 'terms'); ?>">
+            <?php if ($terms_url) : ?>
+                Aceito os <a href="<?php echo esc_url($terms_url); ?>" target="_blank" rel="noopener">Termos de Uso</a><?php if ($privacy_url) : ?> e li a <a href="<?php echo esc_url($privacy_url); ?>" target="_blank" rel="noopener">Política de Privacidade</a><?php endif; ?>.
+            <?php elseif ($privacy_url) : ?>
+                Li a <a href="<?php echo esc_url($privacy_url); ?>" target="_blank" rel="noopener">Política de Privacidade</a> e quero participar.
+            <?php else : ?>
+                Confirmo meus dados e quero participar do sorteio.
+            <?php endif; ?>
+        </label>
     </div>
-    <button type="submit" class="was-btn was-btn-primary was-btn-block">Confirmar Presença</button>
+    <?php if (function_exists('FluentCrmApi')) : ?>
+        <div class="was-form-check">
+            <input id="<?php echo esc_attr($id . 'news'); ?>" type="checkbox" name="was_marketing_opt_in" value="1" <?php checked(was_request_value($_POST, 'was_marketing_opt_in'), '1'); ?>>
+            <label for="<?php echo esc_attr($id . 'news'); ?>">Quero receber por e-mail dicas e novidades do Amigo Secreto. Opcional.</label>
+        </div>
+    <?php endif; ?>
+    <button type="submit" class="was-btn was-btn-primary">Confirmar presença</button>
 </form>

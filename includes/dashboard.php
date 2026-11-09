@@ -78,53 +78,48 @@ function was_update_profile($user) {
 }
 
 function was_render_dashboard() {
-    global $wpdb, $was_auth_notice, $was_auth_view, $was_dashboard_notice;
-
-    $views = dirname(__DIR__) . '/views/dashboard/';
-    ob_start();
-    echo '<div class="was-app"><div class="was-app-container">';
+    global $wpdb, $was_dashboard_notice;
 
     if (!is_user_logged_in()) {
-        $auth_view = $was_auth_view ?? was_request_value($_GET, 'was_auth');
-        if (!in_array($auth_view, ['login', 'register', 'recover'], true)) {
-            $auth_view = 'login';
-        }
-        require $views . 'auth.php';
-    } else {
-        $user = wp_get_current_user();
-        $action = was_request_value($_GET, 'was_act');
-        $group_id = absint(was_request_value($_GET, 'gid'));
-        echo $was_dashboard_notice ?? '';
+        require_once __DIR__ . '/auth.php';
+        return was_render_auth();
+    }
 
-        if ($action === 'create') {
-            require $views . 'create.php';
-        } elseif ($action === 'manage' && $group_id) {
-            $group = was_get_group($group_id);
-            if ($group && (int) $group->created_by === $user->ID) {
-                $table = $wpdb->prefix . 'was_participants';
-                $participants = $wpdb->get_results($wpdb->prepare(
-                    "SELECT name, email, whatsapp FROM $table WHERE group_id = %d ORDER BY id",
-                    $group_id
-                ));
-                $invite_url = get_permalink($group->page_id);
-                require $views . 'manage.php';
-            } else {
-                echo was_notice_markup('Acesso negado.');
-            }
-        } elseif ($action === 'profile') {
-            require $views . 'profile.php';
-        } else {
-            $action = 'list';
-            $table = $wpdb->prefix . 'was_groups';
-            $groups = $wpdb->get_results($wpdb->prepare(
-                "SELECT id, title, status FROM $table WHERE created_by = %d ORDER BY id DESC",
-                $user->ID
+    $views = dirname(__DIR__) . '/views/dashboard/';
+    $user = wp_get_current_user();
+    $action = was_request_value($_GET, 'was_act');
+    $group_id = absint(was_request_value($_GET, 'gid'));
+
+    ob_start();
+    echo '<div class="was-app"><div class="was-app-container was-dashboard">';
+    require $views . 'navigation.php';
+    echo $was_dashboard_notice ?? '';
+
+    if ($action === 'create') {
+        require $views . 'create.php';
+    } elseif ($action === 'manage' && $group_id) {
+        $group = was_get_group($group_id);
+        if ($group && (int) $group->created_by === $user->ID) {
+            $table = $wpdb->prefix . 'was_participants';
+            $participants = $wpdb->get_results($wpdb->prepare(
+                "SELECT name, email, whatsapp FROM $table WHERE group_id = %d ORDER BY id",
+                $group_id
             ));
-            $first_name = strtok(trim($user->display_name), ' @') ?: $user->user_login;
-            require $views . 'list.php';
+            $invite_url = get_permalink($group->page_id);
+            require $views . 'manage.php';
+        } else {
+            echo was_notice_markup('Acesso negado.');
         }
-
-        require $views . 'navigation.php';
+    } elseif ($action === 'profile') {
+        require $views . 'profile.php';
+    } else {
+        $table = $wpdb->prefix . 'was_groups';
+        $groups = $wpdb->get_results($wpdb->prepare(
+            "SELECT id, title, status FROM $table WHERE created_by = %d ORDER BY id DESC",
+            $user->ID
+        ));
+        $first_name = strtok(trim($user->display_name), ' @') ?: $user->user_login;
+        require $views . 'list.php';
     }
 
     echo '</div></div>';

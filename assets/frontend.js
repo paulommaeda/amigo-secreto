@@ -2,8 +2,17 @@
     'use strict';
 
     document.addEventListener('click', function (event) {
-        const target = event.target.closest('.was-app [data-was-view], .was-app [data-was-confirm], .was-app [data-was-copy-link]');
+        const target = event.target.closest('[data-was-password-toggle], .was-app [data-was-view], .was-app [data-was-confirm], .was-app [data-was-copy-link]');
         if (!target) {
+            return;
+        }
+
+        if (target.hasAttribute('data-was-password-toggle')) {
+            const input = document.getElementById(target.getAttribute('aria-controls'));
+            const show = input.type === 'password';
+            input.type = show ? 'text' : 'password';
+            target.setAttribute('aria-pressed', String(show));
+            target.textContent = show ? 'Ocultar' : 'Mostrar';
             return;
         }
 
@@ -20,10 +29,6 @@
             const view = target.dataset.wasView;
             switcher.querySelectorAll('[data-was-panel]').forEach(function (panel) {
                 panel.hidden = panel.dataset.wasPanel !== view;
-            });
-            switcher.querySelectorAll('.was-auth-tab').forEach(function (tab) {
-                const activeView = view === 'recover' ? 'login' : view;
-                tab.classList.toggle('active', tab.dataset.wasView === activeView);
             });
             return;
         }
